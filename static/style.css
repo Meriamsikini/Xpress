@@ -1,0 +1,567 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+
+.container {
+  text-align: center;
+  width: 900px;
+  max-width: 95%;
+}
+
+h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 2rem;
+}
+
+/* Chat area */
+.chat-box {
+  background: #f8f9fb;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  height: 400px;
+  overflow-y: auto;
+  padding: 1rem;
+  text-align: left;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.message {
+  display: inline-block;
+  padding: 0.8rem 1.2rem;
+  border-radius: 20px;
+  margin: 0.5rem 0;
+  max-width: 80%;
+  word-wrap: break-word;
+  animation: fadeIn 0.3s ease;
+}
+
+.user-message {
+  background-color: #007bff;
+  color: white;
+  float: right;
+  clear: both;
+}
+
+.bot-message {
+  background-color: #e5e7eb;
+  color: #111;
+  float: left;
+  clear: both;
+}
+
+/* Input zone */
+.search-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 40px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  padding: 0.5rem 1rem;
+}
+
+.plus-btn {
+  border: none;
+  background: none;
+  font-size: 1.5rem;
+  color: #555;
+  cursor: pointer;
+}
+
+.search-box input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #333;
+  margin: 0 0.8rem;
+}
+
+.icon-btn {
+  border: none;
+  background: none;
+  font-size: 1.3rem;
+  color: #555;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.icon-btn:hover {
+  transform: scale(1.1);
+}
+
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background-color: rgba(0,0,0,0.1);
+  border-radius: 3px;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+/* Barre latérale gauche - reposition to top and togglable width */
+
+.sidebar {
+  position: fixed;
+  left: 20px;
+  top: 150px;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 0 12px 12px 0;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: width 0.28s ease, left 0.2s;
+
+  width: 60px; /* collapsed width */
+  z-index: 100;
+  
+}
+
+
+
+/* open state when toggled by JS */
+.sidebar.open {
+  width: 320px; /* expanded width */
+}
+
+/* top area holding the two buttons */
+
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+   /* 🔹 espace en haut */
+}
+
+
+/* Buttons: backgroundless and at top */
+.sidebar-btn {
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.95rem;
+  text-align: left;
+  display: block;
+}
+/*.sidebar-btn:hover {
+  background: #f7f7f7;
+}
+
+/* history list inside sidebar */
+.history-list {
+  display: none;
+  padding: 8px;
+  overflow-y: auto;
+  max-height: calc(80vh - 80px);
+}
+.sidebar.open .history-list {
+  display: block;
+}
+
+/* history item */
+.history-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 6px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+.history-item:hover {
+  background: #f0f4ff;
+}
+
+/* history row */
+.history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+/* ensure the select button fills available space */
+.history-row .history-item {
+  flex: 1 1 auto;
+  text-align: left;
+  padding-right: 8px;
+}
+
+/* delete button */
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 6px;
+  border-radius: 6px;
+  color: #c0392b;
+}
+.delete-btn:hover {
+  background: rgba(192,57,43,0.08);
+}
+
+/* modal */
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right:0;
+  bottom:0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+.modal-dialog {
+  position: relative;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  width: 320px;
+  max-width: calc(100% - 40px);
+  z-index: 1;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+}
+.modal-dialog h3 {
+  margin-bottom: 8px;
+}
+.modal-actions {
+  display:flex;
+  gap:10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+.btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+.btn-primary {
+  background: #e55353;
+  color: white;
+  border: none;
+}
+/******/
+/* Sidebar buttons: only show emoji initially */
+.sidebar-btn {
+  background: none;  /* pas de background */
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.28s ease, padding 0.28s ease;
+}
+
+.sidebar-btn span.text {
+  display: none; /* texte caché par défaut */
+  margin-left: 10px;
+  font-size: 0.95rem;
+  color: #111;
+}
+
+/* Lorsque sidebar est ouverte, afficher le texte */
+.sidebar.open .sidebar-btn span.text {
+  display: inline;
+}
+
+/* Déplacer le chat-container lors de l'ouverture */
+.container {
+  transition: margin-left 0.3s ease;
+}
+
+
+.container.shifted {
+  margin-left: 320px; /* même que la largeur de la sidebar ouverte */
+}
+
+/* Sidebar: expanded width */
+.sidebar.open {
+  width: 320px;
+}
+
+/* small style for delete modal inline error (if needed) */
+#delete-error {
+  color: #7a1414;
+  background: #ffecec;
+  padding: 8px;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+/* ensure modal overlay click is allowed (existing modal rules apply) */
+
+.login-container {
+  background: #fff;
+  padding: 2.5rem 3rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  width: 400px;
+  max-width: 90%;
+  animation: fadeIn 0.4s ease;
+}
+
+.login-container h2 {
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 1.5rem;
+  font-size: 1.6rem;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  margin: 0.7rem 0;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s ease;
+}
+
+.login-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+.login-container button {
+  width: 100%;
+  padding: 0.9rem;
+  margin-top: 1rem;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.login-container button:hover {
+  background: #0056cc;
+  transform: scale(1.02);
+}
+
+.login-container p {
+  margin-top: 1.2rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+.login-container a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-container a:hover {
+  text-decoration: underline;
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* === Voir / cacher mot de passe === */
+.password-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-container input {
+  width: 100%;
+  padding-right: 2.5rem;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #555;
+  transition: color 0.2s;
+}
+
+.toggle-password:hover {
+  color: #007bff;
+}
+
+/* === Mode Nuit (Dark Mode) === */
+.theme-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  transition: background 0.3s ease, transform 0.2s;
+}
+
+.theme-btn:hover {
+  background: #0056cc;
+  transform: scale(1.1);
+}
+
+/* Thème sombre */
+body.dark-mode {
+  background-color: #1c1c1c;
+  color: #f1f1f1;
+}
+
+body.dark-mode .chat-box {
+  background: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .user-message {
+  background-color: #007bff;
+}
+
+body.dark-mode .bot-message {
+  background-color: #3a3a3a;
+  color: #eee;
+}
+
+body.dark-mode .search-box {
+  background: #2b2b2b;
+  border-color: #444;
+}
+
+body.dark-mode .search-box input {
+  color: #eee;
+}
+
+/* Dark mode: ensure headings and input placeholders are readable */
+body.dark-mode h1 {
+  color: #ffffff;
+}
+
+/* Placeholder color in dark mode (with vendor fallbacks) */
+body.dark-mode .search-box input::placeholder {
+  color: #e6e6e6;
+  opacity: 1;
+}
+body.dark-mode .search-box input::-webkit-input-placeholder { color: #e6e6e6; }
+body.dark-mode .search-box input::-moz-placeholder { color: #e6e6e6; }
+body.dark-mode .search-box input:-ms-input-placeholder { color: #e6e6e6; }
+body.dark-mode .search-box input:-moz-placeholder { color: #e6e6e6; }
+
+body.dark-mode .plus-btn,
+body.dark-mode .icon-btn {
+  color: #ddd;
+}
+.dark-mode #user-input {
+  background-color: #333;
+  color: #fff; /* ✅ texte blanc dans mode sombre */}delete-message
+
+
+
+
+
+
+  /* Mode sombre */
+body.dark-mode {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Texte et éléments à l'intérieur de la sidebar */
+body.dark-mode .sidebar,
+body.dark-mode .sidebar-top,
+body.dark-mode .sidebar-btn,
+body.dark-mode .history-list {
+  background-color: #333;
+  color: #fff;
+}
+
+/* Texte des boutons et spans */
+body.dark-mode .sidebar-btn .text,
+body.dark-mode button,
+body.dark-mode input,
+
+body.dark-mode h3,
+body.dark-mode p {
+  color: #fff;
+  background-color: #333;
+  border-color: #555; /* optionnel pour inputs et boutons */
+}
+
+/* Chat box et search box */
+body.dark-mode .chat-box,
+body.dark-mode .search-box,
+body.dark-mode .icons,
+body.dark-mode .plus-btn,
+body.dark-mode #user-input {
+  background-color: #333;
+  color: #fff;
+  border-color: #555; /* optionnel */
+}
+
+/* Modals */
+body.dark-mode .modal-dialog{
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+/* Input placeholder en blanc */
+body.dark-mode ::placeholder {
+  color: #fff;
+}

@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+pymongo[srv]
+python-dotenv
+newsapi-python
+newspaper3k
+langchain-google-genai
+langchain
+pydantic
+mlflow

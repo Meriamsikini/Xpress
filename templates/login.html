@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Connexion - Xpress Chatbot</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Connexion</h2>
+    <input type="email" id="email" placeholder="Email">
+    <div class="password-container">
+      <input type="password" id="password" placeholder="Mot de passe">
+      <i id="login-toggle-pass" class="fa-solid fa-eye toggle-password" role="button" aria-label="Afficher le mot de passe"></i>
+    </div>
+    <button onclick="login()">Se connecter</button>
+    <p>Pas encore de compte ? <a href="/register">S'inscrire</a></p>
+    <div id="login-alert" class="alert" style="display:none;"></div>
+  </div>
+
+  <script>
+  // toggle password visibility for this page (uses Font Awesome classes)
+  function togglePassword() {
+    const pwd = document.getElementById("password");
+    const icon = document.getElementById("login-toggle-pass");
+    if (!pwd) return;
+    if (pwd.type === "password") {
+      pwd.type = "text";
+      if (icon) icon.classList.replace("fa-eye", "fa-eye-slash");
+    } else {
+      pwd.type = "password";
+      if (icon) icon.classList.replace("fa-eye-slash", "fa-eye");
+    }
+  }
+  // attach click handler safely
+  const loginToggle = document.getElementById("login-toggle-pass");
+  if (loginToggle) loginToggle.addEventListener("click", togglePassword);
+
+  async function login() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const alertDiv = document.getElementById("login-alert");
+
+    alertDiv.style.display = "block";
+    alertDiv.className = "alert";
+
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({email, password})
+      });
+
+      const data = await res.json();
+
+      if (data.error) {
+        alertDiv.textContent = data.error;
+        alertDiv.className = "alert alert-error";
+      } else {
+        alertDiv.textContent = data.message || "Connexion réussie";
+        alertDiv.className = "alert alert-success";
+        localStorage.setItem("user_email", email);
+        setTimeout(() => { window.location.href = "/"; }, 1200);
+      }
+    } catch (err) {
+      alertDiv.textContent = "Erreur réseau.";
+      alertDiv.className = "alert alert-error";
+    }
+  }
+  </script>
+</body>
+</html>
