@@ -8,3 +8,4 @@ langchain-google-genai
 langchain
 pydantic
 mlflow
+passlib==1.7.4
