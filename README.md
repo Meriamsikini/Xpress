@@ -64,3 +64,6 @@ Points d'attention & dépannage
 Sécurité
 --------
 - Stockage minimal des mots de passe : la démo utilise argon2 (passlib) pour le hash. En production, ajouter vérifications, validation d'email, CSRF, HTTPS et règles CORS appropriées.
+
+
+![CI](https://github.com/Meriamsikini/Xpress/actions/workflows/ci.yml/badge.svg)
