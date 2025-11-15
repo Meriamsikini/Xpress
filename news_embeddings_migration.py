@@ -17,26 +17,29 @@ articles_collection = local_db["articles"]
 
 # 🔹 Connexion MongoDB Atlas (TLS forcé)
 atlas_client = MongoClient(
-    ATLAS_URI,
-    tls=True,
-    tlsAllowInvalidCertificates=True
+    ATLAS_URI, tls=True, tlsAllowInvalidCertificates=True
 )
 atlas_db = atlas_client["news_db"]
 embeddings_collection = atlas_db["news_embeddings"]
 
 # 🔹 Initialiser Google Embeddings
 embeddings_model = GoogleGenerativeAIEmbeddings(
-    model="models/text-embedding-004",
-    task_type="semantic_similarity"
+    model="models/text-embedding-004", task_type="semantic_similarity"
 )
+
 
 # 🔹 Fonction pour découper le texte
 def chunk_text(text, max_chars=1500):
     return textwrap.wrap(text, max_chars)
 
+
 # 🔹 Boucle sur les articles
 for article in articles_collection.find():
-    text = f"{article['title']}\n\n{article.get('full_content', article.get('content', ''))}"
+    text = (
+        f"{article['title']}\n\n"
+        f"{article.get('full_content', article.get('content', ''))}"
+    )
+
     chunks = chunk_text(text)
 
     for i, chunk in enumerate(chunks):
@@ -51,9 +54,9 @@ for article in articles_collection.find():
                 "title": article["title"],
                 "source": article.get("source", ""),
                 "url": article.get("url", ""),
-                "publishedAt": article.get("publishedAt", "")
+                "publishedAt": article.get("publishedAt", ""),
             },
-            "embedding": embedding
+            "embedding": embedding,
         }
 
         # Insérer dans Atlas
