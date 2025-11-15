@@ -64,12 +64,3 @@ Points d'attention & dépannage
 Sécurité
 --------
 - Stockage minimal des mots de passe : la démo utilise argon2 (passlib) pour le hash. En production, ajouter vérifications, validation d'email, CSRF, HTTPS et règles CORS appropriées.
-
-Contribuer
-----------
-- Ouvrir une issue pour bugs ou propositions.
-- Les améliorations faciles : pagination de l'historique, meilleure gestion des erreurs LLM, streaming des réponses.
-
-Licence
--------
-Aucune licence fournie avec le dépôt — ajouter une licence si besoin.
